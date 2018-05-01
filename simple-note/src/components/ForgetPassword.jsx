@@ -6,7 +6,6 @@ import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 
-import { Route, Redirect } from "react-router-dom";
 
 const styles = theme => ({
     root: {
@@ -19,14 +18,12 @@ const styles = theme => ({
     },
 });
 
-class Signup extends Component {
+class ForgetPassword extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            email : "",
-            password : "",
-            name: ""
+            email : ""
         }
         this.onSubmit = this.onSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -34,20 +31,18 @@ class Signup extends Component {
 
     onSubmit(event) {
         event.preventDefault();
-        const { email, password } = this.state;
-        auth.createUserWithEmailAndPassword(email, password)
-            .then(authUser => {
-                authUser.sendEmailVerification();
-                authUser.updateProfile( {displayName: this.state.name} );
-                auth.signOut();
-                console.log(authUser);
-
+        const { email } = this.state;
+        auth.sendPasswordResetEmail(email)
+            .then(sentEmail => {
+                alert("Reset Password Email has been sent to " + email);
+                this.props.history.push("/login");
             })
             .catch(authError => {
                 alert(authError);
             })
+
     }
-;
+
     handleChange = name => event => {
         this.setState({
             [name]: event.target.value,
@@ -55,25 +50,15 @@ class Signup extends Component {
     };
 
     render() {
-        const { email, password } = this.state;
+        const { email } = this.state;
         const classes = this.props.classes;
         return (
             <div>
                 <Grid container>
                     <Grid item xs={12}>
                         <Paper className={classes.paper}>
-                            <h1>Sign up</h1>
-
+                            <h1>Reset Password</h1>
                             <form onSubmit={this.onSubmit} autoComplete="off">
-                                <TextField
-                                    id="name"
-                                    label="Name"
-                                    className={classes.textField}
-                                    onChange={this.handleChange('name')}
-                                    margin="normal"
-                                    type="text"
-                                />
-                                <br/>
                                 <TextField
                                     id="email"
                                     label="Email"
@@ -84,17 +69,9 @@ class Signup extends Component {
                                     type="email"
                                 />
                                 <br />
-                                <TextField
-                                    id="password"
-                                    label="Password"
-                                    className={classes.textField}
-                                    value={password}
-                                    onChange={this.handleChange('password')}
-                                    margin="normal"
-                                    type="password"
-                                />
-                                <br />
-                                <Button variant="raised" color="primary" type="submit">Sign up</Button>
+
+
+                                <Button variant="raised" color="primary" type="submit">Reset Password</Button>
                             </form>
                         </Paper>
                     </Grid>
@@ -104,4 +81,4 @@ class Signup extends Component {
     }
 }
 
-export default withStyles(styles)(Signup);
+export default withStyles(styles)(ForgetPassword);

@@ -49,7 +49,7 @@ class Main extends Component {
         super(props);
         this.state = {
             notes : [],
-            current : ""
+            current : "",
         };
         this.addNote = this.addNote.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -60,15 +60,23 @@ class Main extends Component {
         let notesRef = db.ref('notes/' + uid).orderByKey().limitToLast(100);
         notesRef.on('child_added', snapshot => {
             let note = { text: snapshot.val(), id: snapshot.key };
-            this.setState({ notes: [note].concat(this.state.notes) });
+            this.setState({
+                notes: [note].concat(this.state.notes),
+
+            });
         })
+
+
+
     }
+
 
     handleChange = name => event => {
         this.setState({
             [name]: event.target.value,
         });
     };
+
 
 
     addNote(e) {
@@ -80,11 +88,12 @@ class Main extends Component {
 
     render() {
         const classes = this.props.classes;
+
         return (
             <Grid container className={classes.container}>
                 <Grid item xs={6}>
                     <Paper className={classes.paper}>
-                        <p>Hello, { auth.currentUser.email }</p>
+                        <p>Hello, { this.props.displayName}</p>
                         <List className={classes.list}>
                             { /* Render the list of messages */
                                 this.state.notes.map( (note,index) =>
@@ -109,7 +118,9 @@ class Main extends Component {
                             />
                             <br />
                             <Button variant="raised" color="primary" type="submit">Add</Button>
+
                         </form>
+
                     </Paper>
                 </Grid>
             </Grid>

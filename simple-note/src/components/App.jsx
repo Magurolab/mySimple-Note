@@ -13,9 +13,17 @@ import PrivateRoute from './PrivateRoute';
 import Main from './Main';
 import Login from './Login';
 import Signup from './Signup';
-
+import ForgetPassword from "./ForgetPassword";
+import { withStyles } from 'material-ui/styles'
+import EditUserProfile from "./EditUserProfile";
 const theme = createMuiTheme();
 
+const styles = theme => ({
+    root:{
+        flexGrow:1
+    },
+
+})
 class App extends Component {
 
     constructor(props) {
@@ -23,29 +31,41 @@ class App extends Component {
         this.state = {
             loading: true,
             authenticated: false,
-            currentUser: null };
+            currentUser: null,
+            displayName: "",
+        };
+
+    }
+
+    updateDisplayName = () => {
+        this.setState({
+            displayName: auth.currentUser.displayName,
+        })
     }
 
     componentWillMount() { auth.onAuthStateChanged(user => {
-        if (user) {
+        if (user&&user.emailVerified) {
             this.setState({
                     authenticated: true,
                     currentUser: user,
                     loading: false },
-                () => { this.props.history.push('/') }
-            );
+                () => { this.props.history.push('/') })
+
+
+
         } else {
             this.setState({
                 authenticated: false,
                 currentUser: null,
                 loading: false
-            });
+            },() => { this.props.history.push('/login') })
         }
     });
     }
 
     render () {
         const { authenticated, loading } = this.state;
+        const { classes } = this.props
         const content = loading ? (
             <div align="center">
                 <CircularProgress size={80} thickness={5} />
@@ -57,21 +77,29 @@ class App extends Component {
                     path="/"
                     component={Main}
                     authenticated={authenticated}
+                    displayName={this.state.displayName}
                 />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/signup" component={Signup} />
+                <Route exact path="/forgetpassword" component={ForgetPassword} />
+                <Route exact path="/edituserprofile" component={() => <EditUserProfile updateDisplayName={this.updateDisplayName} />}  />
             </div>
         );
         return (
-            <MuiThemeProvider theme={theme}>
-                <div>
+           <MuiThemeProvider theme={theme}>
+                <div className={classes.root}>
                     <AppBar position="static" color="default">
                         <Toolbar>
                             <Typography variant="title" color="inherit">
                                 Simple Note
                             </Typography>
                             { authenticated &&
-                            <Button variant="raised" color="default" onClick={() => auth.signOut()}>Log out</Button>
+                                <div>
+                                    <Button variant="raised" color="default"
+                                            onClick={() => this.props.history.push("/edituserprofile") }
+                                    > Edit Profile </Button>
+                                    <Button variant="raised" color="default" onClick={() => auth.signOut() }>Log out</Button>
+                                </div>
                             }
                         </Toolbar>
                     </AppBar>
@@ -82,4 +110,4 @@ class App extends Component {
     }
 }
 
-export default withRouter(App);
+export default withRouter(withStyles(styles)(App));

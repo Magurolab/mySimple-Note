@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { auth } from '../firebase';
 import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
@@ -19,13 +20,11 @@ const styles = theme => ({
     },
 });
 
-class Signup extends Component {
+class EditUserProfile extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            email : "",
-            password : "",
             name: ""
         }
         this.onSubmit = this.onSubmit.bind(this);
@@ -34,20 +33,18 @@ class Signup extends Component {
 
     onSubmit(event) {
         event.preventDefault();
-        const { email, password } = this.state;
-        auth.createUserWithEmailAndPassword(email, password)
-            .then(authUser => {
-                authUser.sendEmailVerification();
-                authUser.updateProfile( {displayName: this.state.name} );
-                auth.signOut();
-                console.log(authUser);
 
+        auth.currentUser.updateProfile( { displayName: this.state.name } )
+            .then(() => {
+                console.log(this.props);
+                this.props.updateDisplayName();
+                this.props.history.push("/");
             })
             .catch(authError => {
                 alert(authError);
             })
     }
-;
+    ;
     handleChange = name => event => {
         this.setState({
             [name]: event.target.value,
@@ -62,7 +59,7 @@ class Signup extends Component {
                 <Grid container>
                     <Grid item xs={12}>
                         <Paper className={classes.paper}>
-                            <h1>Sign up</h1>
+                            <h1>Edit User Profile</h1>
 
                             <form onSubmit={this.onSubmit} autoComplete="off">
                                 <TextField
@@ -74,27 +71,9 @@ class Signup extends Component {
                                     type="text"
                                 />
                                 <br/>
-                                <TextField
-                                    id="email"
-                                    label="Email"
-                                    className={classes.textField}
-                                    value={email}
-                                    onChange={this.handleChange('email')}
-                                    margin="normal"
-                                    type="email"
-                                />
+
                                 <br />
-                                <TextField
-                                    id="password"
-                                    label="Password"
-                                    className={classes.textField}
-                                    value={password}
-                                    onChange={this.handleChange('password')}
-                                    margin="normal"
-                                    type="password"
-                                />
-                                <br />
-                                <Button variant="raised" color="primary" type="submit">Sign up</Button>
+                                <Button variant="raised" color="primary" type="submit">Confirm</Button>
                             </form>
                         </Paper>
                     </Grid>
@@ -104,4 +83,4 @@ class Signup extends Component {
     }
 }
 
-export default withStyles(styles)(Signup);
+export default withRouter(withStyles(styles)(EditUserProfile));

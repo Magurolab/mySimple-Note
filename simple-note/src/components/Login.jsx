@@ -81,6 +81,7 @@ class Login extends Component {
                             <Button variant="raised" color="primary" type="submit">Log in</Button>
                         </form>
                         <p>Don't have an account? <Link to="/signup">Sign up here</Link></p>
+                        <p>Forget your password? <Link to="/forgetpassword">Reset your password here</Link></p>
                     </Paper>
                 </Grid>
             </Grid>
