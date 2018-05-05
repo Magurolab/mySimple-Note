@@ -82,10 +82,13 @@ class Main extends Component {
 
     addNote(e) {
         e.preventDefault();
+        if(this.state.current === ""){return}
         const uid = auth.currentUser.uid;
         db.ref('notes/' + uid).push(this.state.current);
         this.setState({ current : "" });
     }
+
+
 
     render() {
         const classes = this.props.classes;
@@ -102,7 +105,29 @@ class Main extends Component {
                                         <ListItemText primary={(index+1) + '. ' + note.text}/>
                                         <ListItemSecondaryAction>
                                             <IconButton aria-label="Delete">
-                                                <DeleteIcon />
+                                                <DeleteIcon onClick={()=>{
+
+                                                    // this.setState({
+                                                    //     notes: this.state.notes.filter(
+                                                    //         elt =>{
+                                                    //             elt.id !== note.id
+                                                    //         })
+                                                    // })
+
+                                                    console.log(this.state.notes.filter(
+                                                        elt => elt.id !== note.id
+                                                    ))
+                                                    const uid = auth.currentUser.uid;
+                                                    db.ref('notes/' +uid).child(note.id).remove().then(
+                                                        this.setState({
+                                                            notes: this.state.notes.filter(
+                                                                elt => elt.id !== note.id
+                                                            )
+                                                        })
+                                                    )
+                                                    
+                                                }}
+                                                />
                                             </IconButton>
                                         </ListItemSecondaryAction>
                                     </ListItem> )
