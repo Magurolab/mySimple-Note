@@ -20,8 +20,10 @@ const theme = createMuiTheme();
 
 const styles = theme => ({
     root:{
-        flexGrow:1
+        flexGrow:1,
+
     },
+
 
 })
 class App extends Component {
@@ -44,16 +46,20 @@ class App extends Component {
     }
 
     componentWillMount() { auth.onAuthStateChanged(user => {
-        if (user&&user.emailVerified) {
-            this.setState({
-                    authenticated: true,
-                    currentUser: user,
-                    loading: false ,
-                    displayName: user.displayName
-            },
-                () => { this.props.history.push('/') })
 
-
+        if (user) {
+            if(user.emailVerified ||  (user.providerData[0].providerId === 'facebook.com')){
+                this.setState({
+                        authenticated: true,
+                        currentUser: user,
+                        loading: false ,
+                        displayName: user.displayName
+                    },
+                    () => { this.props.history.push('/') })
+            }
+            else{
+                alert("something is wrong! with user authentication")
+            }
 
         } else {
             this.setState({
@@ -74,6 +80,7 @@ class App extends Component {
             </div>
         ) : (
             <div>
+
                 <PrivateRoute
                     exact
                     path="/"
@@ -96,7 +103,7 @@ class App extends Component {
                                 Simple Note
                             </Typography>
                             { authenticated &&
-                                <div>
+                                <div className={classes.root}>
                                     <Button variant="raised" color="default"
                                             onClick={() => this.props.history.push("/edituserprofile") }
                                     > Edit Profile </Button>

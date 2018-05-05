@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { auth } from '../firebase';
+import { auth,FacebookProvider,GoogleProvider } from '../firebase';
+
 
 import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
+
+
 
 const styles = theme => ({
     root: {
@@ -29,6 +32,7 @@ class Login extends Component {
         }
         this.onSubmit = this.onSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        // this.onFacebookLogin = this.onFacebookLogin.bind(this);
     }
 
     onSubmit(event) {
@@ -45,6 +49,55 @@ class Login extends Component {
             .catch(authError => {
                 alert(authError);
             })
+    }
+
+    onFacebookLogin = (event) => {
+
+        event.preventDefault();
+        // alert("hellooooooooooooo")
+        var provider = FacebookProvider;
+        auth.signInWithPopup(provider).then(function(result) {
+            // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+            var token = result.credential.accessToken;
+            // The signed-in user info.
+            var user = result.user;
+
+            // ...
+        }).catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // The email of the user's account used.
+            var email = error.email;
+            // The firebase.auth.AuthCredential type that was used.
+            var credential = error.credential;
+            // ...
+        });
+        // this.props.history.push("/");
+    }
+    onGoogleLogin = (event) =>{
+        event.preventDefault();
+        // alert("hellooooooooooooo")
+        var provider = GoogleProvider;
+        auth.signInWithPopup(provider).then(function(result) {
+            // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+            var token = result.credential.accessToken;
+            // The signed-in user info.
+            var user = result.user;
+
+            // ...
+        }).catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // The email of the user's account used.
+            var email = error.email;
+            // The firebase.auth.AuthCredential type that was used.
+            var credential = error.credential;
+            // ...
+        });
+        // this.props.history.push("/");
+
     }
 
     handleChange = name => event => {
@@ -84,6 +137,16 @@ class Login extends Component {
                             <br />
                             <Button variant="raised" color="primary" type="submit">Log in</Button>
                         </form>
+
+                        <form onSubmit={ this.onFacebookLogin } >
+                            <br/>
+                            <Button type="submit"  variant="raised" color="primary" >Log in With Facebook</Button>
+                        </form>
+                        <form onSubmit={ this.onGoogleLogin } >
+                            <br/>
+                            <Button type="submit"  variant="raised" color="secondary" >Log in With Google</Button>
+                        </form>
+
                         <p>Don't have an account? <Link to="/signup">Sign up here</Link></p>
                         <p>Forget your password? <Link to="/forgetpassword">Reset your password here</Link></p>
                     </Paper>

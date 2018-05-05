@@ -40,7 +40,6 @@ class ForgetPassword extends Component {
             .catch(authError => {
                 alert(authError);
             })
-
     }
 
     handleChange = name => event => {

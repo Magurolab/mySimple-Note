@@ -65,10 +65,6 @@ class Main extends Component {
 
             });
         })
-
-
-
-
     }
 
 
@@ -106,14 +102,12 @@ class Main extends Component {
                                         <ListItemSecondaryAction>
                                             <IconButton aria-label="Delete">
                                                 <DeleteIcon onClick={()=>{
-
                                                     // this.setState({
                                                     //     notes: this.state.notes.filter(
                                                     //         elt =>{
                                                     //             elt.id !== note.id
                                                     //         })
                                                     // })
-
                                                     console.log(this.state.notes.filter(
                                                         elt => elt.id !== note.id
                                                     ))
@@ -125,7 +119,7 @@ class Main extends Component {
                                                             )
                                                         })
                                                     )
-                                                    
+
                                                 }}
                                                 />
                                             </IconButton>
