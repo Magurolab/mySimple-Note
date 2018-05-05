@@ -37,9 +37,9 @@ class App extends Component {
 
     }
 
-    updateDisplayName = () => {
+    updateDisplayName = (name) => {
         this.setState({
-            displayName: auth.currentUser.displayName,
+            displayName: name,
         })
     }
 
@@ -48,7 +48,9 @@ class App extends Component {
             this.setState({
                     authenticated: true,
                     currentUser: user,
-                    loading: false },
+                    loading: false ,
+                    displayName: user.displayName
+            },
                 () => { this.props.history.push('/') })
 
 

@@ -25,26 +25,48 @@ class EditUserProfile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: ""
+            name: "",
+            email: ""
         }
-        this.onSubmit = this.onSubmit.bind(this);
+        this.onSubmitNewName = this.onSubmitNewName.bind(this);
+        this.onSubmitNewEmail = this.onSubmitNewEmail.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
 
-    onSubmit(event) {
+    onSubmitNewName(event) {
         event.preventDefault();
-
-        auth.currentUser.updateProfile( { displayName: this.state.name } )
-            .then(() => {
-                console.log(this.props);
-                this.props.updateDisplayName();
-                this.props.history.push("/");
-            })
-            .catch(authError => {
-                alert(authError);
-            })
+        if (this.state.name === ""){
+            alert("You have not put in your new name. Please put in and try again.")
+        }else{
+            auth.currentUser.updateProfile( { displayName: this.state.name } )
+                .then(() => {
+                    console.log(this.props);
+                    this.props.updateDisplayName(this.state.name);
+                    this.props.history.push("/");
+                })
+                .catch(authError => {
+                    alert(authError);
+                })
+        }
     }
-    ;
+    onSubmitNewEmail(event){
+        event.preventDefault();
+        if (this.state.email === ""){
+            alert("You have not put in your new email. Please put in and try again.")
+        }else{
+            auth.currentUser.updateEmail(this.state.email)
+                .then( ()=> {
+                    alert("Your email has been set to " + this.state.email);
+                    auth.currentUser.sendEmailVerification();
+                    auth.signOut();
+                })
+                .catch(authError => {
+                    alert(authError);
+                })
+
+        }
+    }
+
     handleChange = name => event => {
         this.setState({
             [name]: event.target.value,
@@ -61,21 +83,33 @@ class EditUserProfile extends Component {
                         <Paper className={classes.paper}>
                             <h1>Edit User Profile</h1>
 
-                            <form onSubmit={this.onSubmit} autoComplete="off">
+                            <form onSubmit={this.onSubmitNewName} autoComplete="off">
                                 <TextField
                                     id="name"
-                                    label="Name"
+                                    label="New name"
                                     className={classes.textField}
                                     onChange={this.handleChange('name')}
                                     margin="normal"
                                     type="text"
                                 />
-                                <br/>
-
-                                <br />
-                                <Button variant="raised" color="primary" type="submit">Confirm</Button>
+                                <Button variant="raised" color="primary" type="submit"> change Name</Button>
                             </form>
-                        </Paper>
+
+                            <form onSubmit={this.onSubmitNewEmail} autoComplete="off">
+                                <TextField
+                                    id="email"
+                                    label="New email"
+                                    className={classes.textField}
+                                    onChange={this.handleChange('email')}
+                                    margin="normal"
+                                    type="email"
+                                />
+                                <Button variant="raised" color="primary" type="submit"> change Email</Button>
+                            </form>
+
+                            <Button variant="raised" color="primary" type="submit" onClick={()=> this.props.history.push("/forgetpassword")}> change Password</Button>
+                            
+                      </Paper>
                     </Grid>
                 </Grid>
             </div>

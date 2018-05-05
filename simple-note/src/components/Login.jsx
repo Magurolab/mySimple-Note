@@ -36,7 +36,11 @@ class Login extends Component {
         const { email, password } = this.state;
         auth.signInWithEmailAndPassword(email, password)
             .then(authUser => {
-                console.log(authUser);
+                if(!auth.currentUser.emailVerified){
+                    alert("verify your email, and try again.")
+                    return;
+                }
+                // alert(authUser.displayName)
             })
             .catch(authError => {
                 alert(authError);
