@@ -8,7 +8,7 @@ import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import { CircularProgress } from 'material-ui/Progress';
 import Button from 'material-ui/Button';
-
+import HomeIcon from '@material-ui/icons/Home';
 import PrivateRoute from './PrivateRoute';
 import Main from './Main';
 import Login from './Login';
@@ -23,6 +23,13 @@ const styles = theme => ({
         flexGrow:1,
 
     },
+    button:{
+        flex:1,
+        direction: 'row',
+        justify: 'flex-end',
+        alignItems: 'flex-start',
+        textAlign: 'right',
+    }
 
 
 })
@@ -103,7 +110,8 @@ class App extends Component {
                                 Simple Note
                             </Typography>
                             { authenticated &&
-                                <div className={classes.root}>
+                                <div className={classes.button} >
+                                    <Button variant="raised" color="primary" onClick={() => this.props.history.push('/')}> <HomeIcon/> </Button>
                                     <Button variant="raised" color="default"
                                             onClick={() => this.props.history.push("/edituserprofile") }
                                     > Edit Profile </Button>

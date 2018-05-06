@@ -8,6 +8,8 @@ import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import IconButton from 'material-ui/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import DragSortableList from 'react-drag-sortable'
+
 import List, {
     ListItem,
     ListItemText,
