@@ -27,8 +27,11 @@ const styles = theme => ({
         color: theme.palette.text.secondary,
     },
     container: {
-        display: 'flex',
-        flexWrap: 'wrap',
+        // display: 'flex',
+        // flexWrap: 'wrap',
+        flex:1,
+        alignContent: 'center',
+
     },
     textField: {
         marginLeft: theme.spacing.unit,

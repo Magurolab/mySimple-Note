@@ -103,6 +103,7 @@ class App extends Component {
         );
         return (
            <MuiThemeProvider theme={theme}>
+               <title>Simple Note</title>
                 <div className={classes.root}>
                     <AppBar position="static" color="default">
                         <Toolbar>
